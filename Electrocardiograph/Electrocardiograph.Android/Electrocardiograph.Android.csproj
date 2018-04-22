@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -79,14 +79,11 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Electrocardiograph\Electrocardiograph.csproj">
       <Project>{53D74ED4-0780-438B-88B8-E65DAFC2D5CA}</Project>
       <Name>Electrocardiograph</Name>
     </ProjectReference>
   </ItemGroup>
-
-
- <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

@@ -11,16 +11,27 @@ namespace Electrocardiograph
 {
     public partial class MainPage : ContentPage
     {
-        ObservableCollection<Point> data;
-        int i = 0;
+
+        private int _currentIteration = 0;
+        private ObservableCollection<Point> _points;
+        private bool _isRun;
+
+        private SfChart _cardiogramChart;
+        private Button _startStopButton;
+
+        private Timer _timer;
+
         Random random = new Random();
 
         public MainPage()
         {
-            var cardiogramChart = new SfChart();
-            data = new ObservableCollection<Point>();
-            cardiogramChart.HorizontalOptions = LayoutOptions.FillAndExpand;
-            cardiogramChart.VerticalOptions = LayoutOptions.FillAndExpand;
+            _timer = new Timer(TimeSpan.FromMilliseconds(10), AddPoint);
+
+            _points = new ObservableCollection<Point>();
+
+            _cardiogramChart = new SfChart();
+            _cardiogramChart.HorizontalOptions = LayoutOptions.FillAndExpand;
+            _cardiogramChart.VerticalOptions = LayoutOptions.FillAndExpand;
 
             var mainStackLayout = new StackLayout();
             mainStackLayout.Orientation = StackOrientation.Horizontal;
@@ -29,24 +40,29 @@ namespace Electrocardiograph
 
             var xAxis = new NumericalAxis();
             xAxis.AutoScrollingDelta = 10;
-            cardiogramChart.PrimaryAxis = xAxis;
+            xAxis.Title.Text = "Time, s";
+            _cardiogramChart.PrimaryAxis = xAxis;
 
             var yAxis = new NumericalAxis();
             yAxis.Minimum = 200;
             yAxis.Maximum = 550;
-            cardiogramChart.SecondaryAxis = yAxis;
+            _cardiogramChart.SecondaryAxis = yAxis;
 
             var series = new LineSeries();
-            series.ItemsSource = data;
+            series.ItemsSource = _points;
             series.Color = Color.Red;
             series.XBindingPath = nameof(Point.X);
             series.YBindingPath = nameof(Point.Y);
-            cardiogramChart.Series.Add(series);
-            cardiogramChart.ChartBehaviors.Add(new ChartZoomPanBehavior { EnablePanning = true, EnableZooming = false, EnableDoubleTap = false });
-            LoadData();
+            _cardiogramChart.Series.Add(series);
+            _cardiogramChart.ChartBehaviors.Add(new ChartZoomPanBehavior { EnablePanning = true, EnableZooming = false, EnableDoubleTap = false });
 
-            var startStopButton = new Button();
-            startStopButton.Text = "Start";
+            _startStopButton = new Button();
+            _startStopButton.Text = "Start";
+            _startStopButton.Clicked += OnStartStopButtonClicked;
+
+            var saveButton = new Button();
+            saveButton.Text = "Save as JPG";
+            saveButton.Clicked += OnSaveButtonClicked;
 
             var controlLabel = new Label();
             controlLabel.Text = "Control:";
@@ -62,7 +78,7 @@ namespace Electrocardiograph
             bpmLabel.Text = "BPM";
             bpmLabel.VerticalOptions = LayoutOptions.Center;
 
-            var heartRateEntry= new Entry();
+            var heartRateEntry = new Entry();
             heartRateEntry.Text = "88";
             heartRateEntry.VerticalOptions = LayoutOptions.Start;
             heartRateEntry.IsEnabled = false;
@@ -73,14 +89,19 @@ namespace Electrocardiograph
             heartRateLayout.Children.Add(heartRateEntry);
             heartRateLayout.Children.Add(bpmLabel);
 
+            var buttonsLayout = new StackLayout();
+            buttonsLayout.Orientation = StackOrientation.Vertical;
+            buttonsLayout.Children.Add(_startStopButton);
+            buttonsLayout.Children.Add(saveButton);
+
             var controlFrame = new Frame();
             controlFrame.OutlineColor = Color.Accent;
-            controlFrame.Content = startStopButton;
-           
+            controlFrame.Content = buttonsLayout;
+
             var resultsFrame = new Frame();
             resultsFrame.OutlineColor = Color.Accent;
             resultsFrame.Content = heartRateLayout;
-            
+
             var rightPanelLayout = new StackLayout();
             rightPanelLayout.Orientation = StackOrientation.Vertical;
             rightPanelLayout.Children.Add(controlLabel);
@@ -88,21 +109,47 @@ namespace Electrocardiograph
             rightPanelLayout.Children.Add(resultsLabel);
             rightPanelLayout.Children.Add(resultsFrame);
 
-            mainStackLayout.Children.Add(cardiogramChart);
+            mainStackLayout.Children.Add(_cardiogramChart);
             mainStackLayout.Children.Add(rightPanelLayout);
 
             Content = mainStackLayout;
             Padding = new Thickness(15);
+
         }
 
-        public void LoadData()
+        private void OnStartStopButtonClicked(object sender, EventArgs e)
         {
-            Device.StartTimer(new TimeSpan(0, 0, 0, 0, 10), () =>
+            if (_isRun)
             {
-                data.Add(new Point(i, random.Next(200, 550)));
-                i++;
-                return true;
-            });
+                _isRun = false;
+                _timer.Stop();
+                //Device.BeginInvokeOnMainThread(() =>
+                //{
+                //    Task.Delay(4000).Wait();
+                //    _startStopButton.Text = "Start";
+                //});
+
+                return;
+            }
+            _isRun = true;
+            _points.Clear();
+            _currentIteration = 0;
+            Device.BeginInvokeOnMainThread(() => _startStopButton.Text = "Stop");
+
+            _timer.Start();
+        }
+
+        private void OnSaveButtonClicked(object sender, EventArgs e)
+        {
+            _cardiogramChart.SaveAsImage("ChartSample.jpg");
+        }
+
+        private void AddPoint()
+        {
+
+            _points.Add(new Point(_currentIteration, random.Next(200, 550)));
+            _currentIteration++;
+
         }
     }
 }
