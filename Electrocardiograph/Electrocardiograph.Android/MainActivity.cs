@@ -1,15 +1,12 @@
-﻿using System;
-using Android.App;
-using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Android.OS;
-
-namespace Electrocardiograph.Droid
+﻿namespace Electrocardiograph.Droid
 {
-    [Activity(Label = "Electrocardiograph", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Landscape)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    using Android.App;
+    using Android.Content.PM;
+    using Android.OS;
+    using Xamarin.Forms;
+
+    [Activity(Label = "Electrocardiograph", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
@@ -18,8 +15,22 @@ namespace Electrocardiograph.Droid
 
             base.OnCreate(bundle);
 
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+            Forms.Init(this, bundle);
+
+            var bluetooth = new BluetoothService();
+            App.SetBluetooth(bluetooth);
+
             LoadApplication(new App());
+
+            MessagingCenter.Subscribe<MainPage>(this, "setLandScape", sender =>
+            {
+                RequestedOrientation = ScreenOrientation.Landscape;
+            });
+
+            MessagingCenter.Subscribe<MainPage>(this, "preventLandScape", sender =>
+            {
+                RequestedOrientation = ScreenOrientation.Portrait;
+            });
         }
     }
 }

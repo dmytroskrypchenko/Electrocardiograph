@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Electrocardiograph"
+             x:Class="Electrocardiograph.DeviceList"
+             Title="Electrocardiograph">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="heart.png"/>
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <StackLayout.Padding>10,10,10,10</StackLayout.Padding>
+        <ListView x:Name="pairedDevicesListView" ItemSelected="OnItemSelected"
+			AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
+                            <StackLayout Padding="5,0,0,0" VerticalOptions="StartAndExpand" Orientation="Vertical">
+                                <Label Text="{Binding Name}" YAlign="Center" Font="Medium" LineBreakMode="TailTruncation" TextColor="Red" />
+                                <Label Text="{Binding Address}" YAlign="Center" Font="Medium" TextColor="Red" Opacity="0.5" />
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button x:Name="connectButton" Clicked="OnConnectButtonClicked" Text="Please select Device" IsEnabled="False" />
+    </StackLayout>
+
+</ContentPage>
