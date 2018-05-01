@@ -83,12 +83,14 @@
 
         private void OnSaveButtonClicked(object sender, EventArgs e)
         {
-            _cardiogramChart.SaveAsImage("ChartSample.jpg");
+            _cardiogramChart.SaveAsImage(GenerateFileName());
         }
 
         private void OnSendToClinickButtonClicked(object sender, EventArgs e)
         {
-            var sendToClinicPage = new SendToClinic();
+            var fileName = GenerateFileName();
+            _cardiogramChart.SaveAsImage(fileName);
+            var sendToClinicPage = new SendToClinic(fileName);
             Navigation.PushAsync(sendToClinicPage);
         }
 
@@ -105,6 +107,11 @@
                 }
             }
             return (int)((60 * countQRS) / _points.Last().X);
+        }
+
+        private string GenerateFileName()
+        {
+            return "Electrocardiogram_" + DateTime.Now.ToString("ddMMMyyyy_HH:mm") + ".jpg";
         }
     }
 }
