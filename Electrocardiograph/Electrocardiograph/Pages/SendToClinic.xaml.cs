@@ -19,9 +19,9 @@
             if (emailMessenger.CanSendEmail)
             {
                 var email = new EmailMessageBuilder()
-                    .To("dim_skrip@mail.ru")
-                    .Subject("Xamarin Messaging Plugin")
-                    .Body("Hello from your friends at Xamarin!")
+                    .To(clinicEmailEntry.Text)
+                    .Subject(subjectEntry.Text)
+                    .Body(bodyEditor.Text)
                     .Build();
 
                 emailMessenger.SendEmail(email);
