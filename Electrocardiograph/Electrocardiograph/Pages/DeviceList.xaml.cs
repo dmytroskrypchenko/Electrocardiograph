@@ -1,4 +1,4 @@
-﻿namespace Electrocardiograph
+﻿namespace Electrocardiograph.Pages
 {
     using System;
     using Xamarin.Forms;
@@ -27,7 +27,7 @@
         {
             if (_bluetooth.ConnectToDevice(_selectedDevice, out string errorMessage))
             {
-                var mainPage = new MainPage(_bluetooth);
+                var mainPage = new ChartElectrocardiograph(_bluetooth);
                 Navigation.PushAsync(mainPage);
             }
             else

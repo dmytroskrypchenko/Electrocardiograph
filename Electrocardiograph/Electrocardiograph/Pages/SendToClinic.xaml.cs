@@ -1,4 +1,4 @@
-﻿namespace Electrocardiograph
+﻿namespace Electrocardiograph.Pages
 {
     using System;
     using Xamarin.Forms;

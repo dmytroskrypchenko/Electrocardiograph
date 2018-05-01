@@ -1,11 +1,11 @@
-﻿namespace Electrocardiograph
+﻿namespace Electrocardiograph.Pages
 {
     using System;
     using System.Collections.ObjectModel;
     using System.Linq;
     using Xamarin.Forms;
 
-    public partial class MainPage : ContentPage
+    public partial class ChartElectrocardiograph : ContentPage
     {
         private const int Threshold = 440;
         private const int ArduinoDelay = 10;//msec
@@ -15,7 +15,7 @@
         private int _currentIteration = 0;
         private ObservableCollection<Point> _points = new ObservableCollection<Point>();
 
-        public MainPage(IBluetooth bluetooth)
+        public ChartElectrocardiograph(IBluetooth bluetooth)
         {
             _bluetooth = bluetooth;
 

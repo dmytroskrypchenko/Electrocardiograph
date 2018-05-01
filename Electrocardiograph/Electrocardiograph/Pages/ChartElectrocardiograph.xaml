@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Electrocardiograph"
              xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
-             x:Class="Electrocardiograph.MainPage"
+             x:Class="Electrocardiograph.Pages.ChartElectrocardiograph"
              Title="Electrocardiograph">
 
     <ContentPage.ToolbarItems>

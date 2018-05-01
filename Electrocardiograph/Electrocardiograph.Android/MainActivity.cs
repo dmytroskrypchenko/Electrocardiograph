@@ -3,6 +3,7 @@
     using Android.App;
     using Android.Content.PM;
     using Android.OS;
+    using Electrocardiograph.Pages;
     using Xamarin.Forms;
 
     [Activity(Label = "Electrocardiograph", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
@@ -22,12 +23,12 @@
 
             LoadApplication(new App());
 
-            MessagingCenter.Subscribe<MainPage>(this, "setLandScape", sender =>
+            MessagingCenter.Subscribe<ChartElectrocardiograph>(this, "setLandScape", sender =>
             {
                 RequestedOrientation = ScreenOrientation.Landscape;
             });
 
-            MessagingCenter.Subscribe<MainPage>(this, "preventLandScape", sender =>
+            MessagingCenter.Subscribe<ChartElectrocardiograph>(this, "preventLandScape", sender =>
             {
                 RequestedOrientation = ScreenOrientation.Portrait;
             });
