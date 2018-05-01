@@ -6,20 +6,16 @@
 
     public partial class MainPage : ContentPage
     {
+        private IBluetooth _bluetooth;
+        private bool _isRun;
         private int _currentIteration = 0;
         private ObservableCollection<Point> _points = new ObservableCollection<Point>();
-        private bool _isRun;
 
-        private Timer _timer;
-
-        Random random = new Random();
-
-        public MainPage()
+        public MainPage(IBluetooth bluetooth)
         {
+            _bluetooth = bluetooth;
+
             InitializeComponent();
-
-            _timer = new Timer(TimeSpan.FromMilliseconds(10), AddPoint);
-
             series.ItemsSource = _points;
         }
 
@@ -40,27 +36,36 @@
             if (_isRun)
             {
                 _isRun = false;
-                _timer.Stop();
-                Device.BeginInvokeOnMainThread(() => startStopButton.Text = "Start");
+                //Device.BeginInvokeOnMainThread(() => startStopButton.Text = "Start");
+                _bluetooth.DataReceived -= OnBluetoothDataReceived;
                 return;
             }
             _isRun = true;
             _points.Clear();
             _currentIteration = 0;
             //Device.BeginInvokeOnMainThread(() => startStopButton.Text = "Stop");
+            _bluetooth.DataReceived += OnBluetoothDataReceived;
+        }
 
-            _timer.Start();
+        private void OnBluetoothDataReceived(object sender, BluetoothDataReceivedEventArgs e)
+        {
+            foreach (var value in e.Values)
+            {
+                if (!string.IsNullOrEmpty(value) && value != "!")
+                {
+                    int.TryParse(value, out int parsedValue);
+
+                    var point = new Point(_currentIteration, parsedValue);
+                    Device.BeginInvokeOnMainThread(() => _points.Add(point));
+
+                }
+                _currentIteration++;
+            }
         }
 
         private void OnSaveButtonClicked(object sender, EventArgs e)
         {
             _cardiogramChart.SaveAsImage("ChartSample.jpg");
-        }
-
-        private void AddPoint()
-        {
-            _points.Add(new Point(_currentIteration, random.Next(200, 550)));
-            _currentIteration++;
         }
     }
 }
