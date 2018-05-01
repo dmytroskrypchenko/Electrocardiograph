@@ -2,10 +2,14 @@
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using Xamarin.Forms;
 
     public partial class MainPage : ContentPage
     {
+        private const int Threshold = 440;
+        private const int ArduinoDelay = 10;//msec
+
         private IBluetooth _bluetooth;
         private bool _isRun;
         private int _currentIteration = 0;
@@ -36,8 +40,14 @@
             if (_isRun)
             {
                 _isRun = false;
-                //Device.BeginInvokeOnMainThread(() => startStopButton.Text = "Start");
+
                 _bluetooth.DataReceived -= OnBluetoothDataReceived;
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    startStopButton.Text = "Start";
+                    heartRateEntry.Text = CalculateHeartRate().ToString();
+                });
+
                 return;
             }
             _isRun = true;
@@ -55,7 +65,7 @@
                 {
                     int.TryParse(value, out int parsedValue);
 
-                    var point = new Point(_currentIteration, parsedValue);
+                    var point = new Point(_currentIteration * ArduinoDelay / 1000.0, parsedValue);
                     Device.BeginInvokeOnMainThread(() => _points.Add(point));
 
                 }
@@ -66,6 +76,21 @@
         private void OnSaveButtonClicked(object sender, EventArgs e)
         {
             _cardiogramChart.SaveAsImage("ChartSample.jpg");
+        }
+
+        private int CalculateHeartRate()
+        {
+            int countQRS = 0;
+            for (int i = 2; i < _points.Count - 2; i++)
+            {
+                if (_points[i].Y >= Threshold &&
+                    _points[i].Y > _points[i - 1].Y && _points[i].Y > _points[i - 2].Y &&
+                    _points[i].Y > _points[i + 1].Y && _points[i].Y > _points[i + 2].Y)
+                {
+                    countQRS++;
+                }
+            }
+            return (int)((60 * countQRS) / _points.Last().X);
         }
     }
 }

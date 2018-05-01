@@ -2,13 +2,13 @@
 {
     public struct Point
     {
-        public Point(int x, int y)
+        public Point(double x, double y)
         {
             X = x;
             Y = y;
         }
 
-        public int X { get; set; }
-        public int Y { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
     }
 }

@@ -14,7 +14,7 @@
         <StackLayout.Padding>10,10,10,10</StackLayout.Padding>
         <chart:SfChart x:Name="_cardiogramChart" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <chart:SfChart.PrimaryAxis>
-                <chart:NumericalAxis AutoScrollingDelta="10">
+                <chart:NumericalAxis AutoScrollingDelta="5">
                     <chart:NumericalAxis.Title>
                         <chart:ChartAxisTitle Text="Time, s"/>
                     </chart:NumericalAxis.Title>
