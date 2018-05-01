@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:validators="clr-namespace:Electrocardiograph.Validators"
              x:Class="Electrocardiograph.Pages.SendToClinic"
              Title="Electrocardiograph">
 
@@ -11,12 +12,16 @@
     <ContentPage.Content>
         <StackLayout Padding="10">
             <Label x:Name="clinicEmailLabel" Text="To:" Font="Large"></Label>
-            <Entry x:Name="clinicEmailEntry" Placeholder="Enter the recipient"></Entry>
+            <Entry x:Name="clinicEmailEntry" Placeholder="Enter the recipient">
+                <Entry.Behaviors>
+                    <validators:EmailValidator x:Name="emailValidator"/>
+                </Entry.Behaviors>
+            </Entry>
             <Label x:Name="subjectLabel" Text="Subject:" Font="Large"></Label>
             <Entry x:Name="subjectEntry" Placeholder="Enter the subject"></Entry>
             <Label x:Name="bodyLabel" Text="Body:" Font="Large"></Label>
             <Editor x:Name="bodyEditor" VerticalOptions="FillAndExpand"></Editor>
-            <Button x:Name="sendButton" Clicked="OnSendToClinicButtonClicked" Text="Send to Clinic" IsEnabled="False" />
+            <Button x:Name="sendButton" Clicked="OnSendToClinicButtonClicked" Text="Send to Clinic" IsEnabled="{Binding Source={x:Reference emailValidator}, Path=IsValid}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
