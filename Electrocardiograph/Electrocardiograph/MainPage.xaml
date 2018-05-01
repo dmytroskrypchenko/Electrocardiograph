@@ -10,8 +10,7 @@
         <ToolbarItem Icon="heart.png"/>
     </ContentPage.ToolbarItems>
 
-    <StackLayout x:Name="mainStackLayout" Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-        <StackLayout.Padding>10,10,10,10</StackLayout.Padding>
+    <StackLayout x:Name="mainStackLayout" Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="10">
         <chart:SfChart x:Name="_cardiogramChart" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <chart:SfChart.PrimaryAxis>
                 <chart:NumericalAxis AutoScrollingDelta="5">
@@ -37,16 +36,17 @@
         <StackLayout x:Name="rightPanelLayout" Orientation="Vertical">
             <Label x:Name="controlLabel" Text="Control:"></Label>
             <Frame x:Name="controlFrame" OutlineColor ="Color.Accent">
-                <StackLayout Orientation="Vertical">
+                <StackLayout Orientation="Vertical" Padding="-10">
                     <Button x:Name="startStopButton" Text="Start" Clicked="OnStartStopButtonClicked"></Button>
-                    <Button x:Name="saveButton" Text="Save as JPG" Clicked="OnSaveButtonClicked"></Button>
+                    <Button x:Name="saveButton" Text="Save as JPG" Clicked="OnSaveButtonClicked" IsEnabled="False"></Button>
+                    <Button x:Name="sendButton" Text="Send to clinic" Clicked="OnSendToClinickButtonClicked" IsEnabled="False"></Button>
                 </StackLayout>
             </Frame>
             <Label x:Name="resultsLabel" Text="Results:"></Label>
             <Frame x:Name="resultsFrame" OutlineColor ="Color.Accent">
-                <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal" Padding="-10">
                     <Label x:Name="heartRateLabel" Text="Heart rate:" VerticalOptions="Center"></Label>
-                    <Entry x:Name="heartRateEntry" Text="88" VerticalOptions="Start" IsEnabled="False"></Entry>
+                    <Entry x:Name="heartRateEntry" Text="0" VerticalOptions="Start" IsEnabled="False"></Entry>
                     <Label x:Name="bpmLabel" Text="BPM" VerticalOptions="Center"></Label>
                 </StackLayout>
             </Frame>

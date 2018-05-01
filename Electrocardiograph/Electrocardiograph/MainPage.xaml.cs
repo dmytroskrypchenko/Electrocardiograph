@@ -46,6 +46,8 @@
                 {
                     startStopButton.Text = "Start";
                     heartRateEntry.Text = CalculateHeartRate().ToString();
+                    saveButton.IsEnabled = true;
+                    sendButton.IsEnabled = true;
                 });
 
                 return;
@@ -53,7 +55,13 @@
             _isRun = true;
             _points.Clear();
             _currentIteration = 0;
-            //Device.BeginInvokeOnMainThread(() => startStopButton.Text = "Stop");
+            //Device.BeginInvokeOnMainThread(() =>
+            //{
+            //    startStopButton.Text = "Stop";
+            //    heartRateEntry.Text = "0";
+            //    saveButton.IsEnabled = false;
+            //    sendButton.IsEnabled = false;
+            //});
             _bluetooth.DataReceived += OnBluetoothDataReceived;
         }
 
@@ -76,6 +84,12 @@
         private void OnSaveButtonClicked(object sender, EventArgs e)
         {
             _cardiogramChart.SaveAsImage("ChartSample.jpg");
+        }
+
+        private void OnSendToClinickButtonClicked(object sender, EventArgs e)
+        {
+            var sendToClinicPage = new SendToClinic();
+            Navigation.PushAsync(sendToClinicPage);
         }
 
         private int CalculateHeartRate()
