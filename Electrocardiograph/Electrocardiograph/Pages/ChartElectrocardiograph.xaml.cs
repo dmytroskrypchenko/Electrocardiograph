@@ -10,10 +10,10 @@
         private const int Threshold = 440;
         private const int ArduinoDelay = 10;//msec
 
-        private IBluetooth _bluetooth;
+        private readonly IBluetooth _bluetooth;
         private bool _isRun;
         private int _currentIteration = 0;
-        private ObservableCollection<Point> _points = new ObservableCollection<Point>();
+        private readonly ObservableCollection<Point> _points = new ObservableCollection<Point>();
 
         public ChartElectrocardiograph(IBluetooth bluetooth)
         {
@@ -96,6 +96,9 @@
 
         private int CalculateHeartRate()
         {
+            if (_points.Count == 0)
+                return 0;
+
             int countQRS = 0;
             for (int i = 2; i < _points.Count - 2; i++)
             {

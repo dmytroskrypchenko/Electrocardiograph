@@ -39,8 +39,6 @@
             {
                 PairedDevices.Add(new PairedDevice(device.Name, device.Address));
             }
-            PairedDevices.Add(new PairedDevice("Test", "rererer"));
-            PairedDevices.Add(new PairedDevice("Test2", "dsdsdsd"));
         }
 
         public bool ConnectToDevice(PairedDevice device, out string errorMessage)
@@ -61,21 +59,19 @@
             // cancel discovery because it slows down the connection and may cause it to fail altogether
             BluetoothAdapter.CancelDiscovery();
 
-            bool connected = false;
             try
             {
                 ConnectionStatus = BluetoothConnectionStatus.Connecting;
                 BluetoothSocket.Connect();
-                connected = true;
             }
             catch (Java.IO.IOException connectException)
             {
-                errorMessage = "Connection Failed:" + connectException;
+                errorMessage = "Connection Failed:" + connectException.Message;
                 return false;
             }
             catch (Exception connectException)
             {
-                errorMessage = "Connection Failed:" + connectException;
+                errorMessage = "Connection Failed:" + connectException.Message;
                 return false;
             }
             ConnectionStatus = BluetoothConnectionStatus.Connected;
@@ -83,7 +79,7 @@
             StartListeningForDataFromBluetoothDevice();
             ConnectionStatus = BluetoothConnectionStatus.ConnectedAndListening;
 
-            return connected;
+            return true;
         }
 
         protected void StartListeningForDataFromBluetoothDevice()
@@ -96,7 +92,7 @@
 
             if (BluetoothSocket.InputStream.CanRead)
             {
-                new Thread(new ThreadStart(() =>
+                new Thread(() =>
                 {
                     byte[] buffer;
 
@@ -134,25 +130,18 @@
                             currentMessage = previousEnding + wholeMessage.Substring(0, lastIndexOfNewLine);
                             previousEnding = wholeMessage.Substring(lastIndexOfNewLine, wholeMessage.Length - lastIndexOfNewLine);
 
-                            var points = currentMessage.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                            var points = currentMessage.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                             DataReceived(this, new BluetoothDataReceivedEventArgs(points));
                         }
                         Thread.Sleep(250);
                     }
-                })).Start();
+                }).Start();
             }
         }
 
         private BluetoothDevice FindDevice(string deviceAddress)
         {
-            foreach (BluetoothDevice device in BluetoothAdapter.BondedDevices)
-            {
-                if (device.Address == deviceAddress)
-                {
-                    return device;
-                }
-            }
-            return null;
+            return BluetoothAdapter.BondedDevices.FirstOrDefault(device => device.Address == deviceAddress);
         }
     }
 }

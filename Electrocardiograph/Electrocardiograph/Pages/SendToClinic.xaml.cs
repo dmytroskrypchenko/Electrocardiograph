@@ -8,7 +8,7 @@
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SendToClinic : ContentPage
     {
-        private string _fileName;
+        private readonly string _fileName;
 
         public SendToClinic(string fileName)
         {

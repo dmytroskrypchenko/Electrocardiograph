@@ -4,7 +4,7 @@
 
     public partial class App : Application
     {
-        static IBluetooth _bluetooth;
+        private static IBluetooth _bluetooth;
         public App()
         {
             InitializeComponent();

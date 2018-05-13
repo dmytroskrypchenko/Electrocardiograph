@@ -5,7 +5,7 @@
 
     public partial class DeviceList : ContentPage
     {
-        private IBluetooth _bluetooth;
+        private readonly IBluetooth _bluetooth;
         private PairedDevice _selectedDevice;
 
         public DeviceList(IBluetooth bluetooth)
