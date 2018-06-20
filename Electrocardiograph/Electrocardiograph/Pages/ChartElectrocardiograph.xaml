@@ -26,7 +26,7 @@
             </chart:SfChart.SecondaryAxis>
 
             <chart:SfChart.Series>
-                <chart:LineSeries x:Name="series" Color="Red" XBindingPath="X" YBindingPath="Y"/>
+                <chart:LineSeries x:Name="series" Color="Red" StrokeWidth="1" XBindingPath="X" YBindingPath="Y"/>
             </chart:SfChart.Series>
 
             <chart:SfChart.ChartBehaviors>
